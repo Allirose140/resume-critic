@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
-from services.pdf_parser import ResumeParser
-from services.ai_critic import AICritic
+from pdf_parser import ResumeParser
+from ai_critic import AICritic
 import os
 
 app = FastAPI(
@@ -333,5 +333,6 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
+
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
