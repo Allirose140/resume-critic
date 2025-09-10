@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
-from services.pdf_parser import ResumeParser
-from services.ai_critic import AICritic
+from app.services.pdf_parser import ResumeParser
+from app.services.ai_critic import AICritic
 import os
 
 app = FastAPI(
