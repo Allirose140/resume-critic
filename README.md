@@ -1,6 +1,10 @@
 # AI Resume Critic
 
 An intelligent resume analysis tool that provides instant AI-powered feedback to help job seekers improve their resumes. Upload your resume and get comprehensive insights on content quality, structure, keyword optimization, and actionable recommendations.
+## Live Demo
+
+🌐 Try it live: https://resume-critic.onrender.com/upload
+Note: Initial load may take 30-60 seconds due to free hosting limitations.
 
 ## Features
 
@@ -152,5 +156,6 @@ This project is open source and available under the MIT License.
 For questions or support, please open an issue in the repository.
 
 ---
+
 
 **Note**: This application currently uses a mock AI analysis system. For production deployment with real AI capabilities, you'll need to integrate with OpenAI, Anthropic, or similar AI service providers.
