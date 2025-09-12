@@ -1,8 +1,9 @@
 # main.py
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import HTMLResponse
-from services.pdf_parser import ResumeParser
-from services.ai_critic import AICritic
+from app.services.pdf_parser import ResumeParser
+from app.services.ai_critic import AICritic
+
 
 app = FastAPI(
     title="AI Resume Critic",
@@ -170,3 +171,4 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
