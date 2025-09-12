@@ -2,6 +2,7 @@ import io, os, zipfile
 from typing import Optional
 from PyPDF2 import PdfReader
 from docx import Document
+PARSER_VERSION = "sniff-1"
 
 class ResumeParser:
     """
@@ -12,6 +13,7 @@ class ResumeParser:
     async def parse_resume(self, filename: Optional[str], file_bytes: bytes) -> str:
         if not file_bytes:
             raise ValueError("Empty file")
+            print(f"[parser] version={PARSER_VERSION} filename={filename!r}")
 
         kind = self._detect_kind(file_bytes)  # primary: sniff bytes
 
@@ -70,3 +72,4 @@ class ResumeParser:
         if not text:
             raise ValueError("Unable to extract text from DOCX")
         return text
+
