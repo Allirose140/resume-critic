@@ -1,4 +1,3 @@
-# main.py
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import HTMLResponse
 from app.services.pdf_parser import ResumeParser
@@ -174,6 +173,7 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 
 
