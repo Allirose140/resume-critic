@@ -3,7 +3,10 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import HTMLResponse
 from app.services.pdf_parser import ResumeParser
 from app.services.ai_critic import AICritic
-
+import logging, inspect
+import app.services.pdf_parser as parser_mod
+logging.warning("USING PARSER: file=%s version=%s",
+                inspect.getsourcefile(parser_mod), getattr(parser_mod, "PARSER_VERSION", "unknown"))
 
 app = FastAPI(
     title="AI Resume Critic",
@@ -171,5 +174,6 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
 
