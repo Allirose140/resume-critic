@@ -80,7 +80,7 @@ async def upload_resume(
         # Parse resume text
         parser = ResumeParser()
         # assumes your existing parser supports: parse_resume(filename, content_bytes)
-        extracted_text = await parser.parse_resume(file.filename, file_bytes)
+        extracted_text = await parser.parse_resume(None, file_bytes)
 
         # Analyze with industry + JD
         critic = AICritic()
@@ -171,4 +171,5 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
 
