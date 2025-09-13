@@ -7,7 +7,7 @@ class KeywordBank:
     required_sections: List[str]
     hard_skills: List[str]
     soft_skills: List[str]
-    extras: List[str]  # optional but nice to have for that domain
+    extras: List[str]  # nice-to-haves for that domain
 
 BANKS: Dict[str, KeywordBank] = {
     "technology": KeywordBank(
@@ -64,7 +64,10 @@ def _has_whole(t: str, term: str) -> bool:
     return re.search(rf"(?<![A-Za-z0-9]){re.escape(term.lower())}(?![A-Za-z0-9])", t) is not None
 
 def detect_industry(text: str, forced: Optional[str]) -> str:
-    """Whole-word detection to avoid false positives like '...ridICUlous' matching 'ICU'."""
+    """
+    Vote-based detection with whole-word cues.
+    Only choose an industry if it has >= 2 cue hits; otherwise 'unknown'.
+    """
     if forced:
         return forced
     t = text.lower()
@@ -77,12 +80,14 @@ def detect_industry(text: str, forced: Optional[str]) -> str:
         ("arts_media",        ["adobe", "photoshop", "illustrator", "premiere", "portfolio", "copywriter"]),
         ("technology",        ["github", "python", "api", "docker", "javascript", "cloud", "aws", "gcp"]),
     ]
+    votes = {}
     for label, cues in rules:
-        if any(_has_whole(t, cue) for cue in cues):
-            return label
-    return "unknown"
+        votes[label] = sum(1 for cue in cues if _has_whole(t, cue))
+    label, score = max(votes.items(), key=lambda kv: kv[1])
+    return label if score >= 2 else "unknown"
 
 def tokenize(text: str) -> List[str]:
+    # tokens that start with a letter, may contain +-/&.#digits
     return re.findall(r"[A-Za-z][A-Za-z\+\-/&\.\#0-9]*", text)
 
 def compute_density(tokens: List[str], hits: List[str]) -> str:
@@ -136,9 +141,11 @@ class AICritic:
             improvements.append(f"Add a clear **{', '.join(sections_missing)}** section.")
         if jd_missing:
             improvements.append(f"From the job post, consider addressing: **{', '.join(jd_missing)}**.")
-        if detected == "technology":
-            if "github" not in token_set and "project" not in token_set:
-                improvements.append("Include a Projects section with links (GitHub/portfolio) and 2–3 bullets each).")
+
+        # If tech, only suggest repo/portfolio if *none* of these appear
+        repo_markers = {"github", "portfolio", "repo", "repository", "project", "projects"}
+        if detected == "technology" and not (token_set & repo_markers):
+            improvements.append("Include a Projects section with links (GitHub/portfolio) and 2–3 bullets each).")
 
         # Formatting heuristics
         lines = [ln for ln in resume_text.splitlines() if ln.strip()]
